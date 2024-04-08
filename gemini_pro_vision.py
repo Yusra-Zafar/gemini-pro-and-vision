@@ -6,7 +6,7 @@ from PIL import Image
 load_dotenv()  
 
 # setting up api key
-genai.configure(api_key = os.getenv("GOOGLE_API_KEY"))
+# genai.configure(api_key = os.getenv("GOOGLE_API_KEY"))
 
 # function to load gemini pro and get responses
 model = genai.GenerativeModel("gemini-pro-vision")
@@ -19,6 +19,9 @@ def callGeminiVision(prompt, image):
     return response.text
 
 # setup streamlit UI
+with st.sidebar:
+    api_key = st.text_input('Enter your Gemini API key: ', type = 'password')
+genai.configure(api_key = api_key)
 
 st.title("Gemini Pro Vision")
 
@@ -35,3 +38,6 @@ submit = st.button("Submit")
 if submit:
     response = callGeminiVision(prompt, image)
     st.write(response)
+
+if not api_key:
+    st.warning("Please enter your Gemini API key in the sidebar.")
